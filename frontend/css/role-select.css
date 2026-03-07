@@ -1,0 +1,92 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #00796b, #26a69a);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-container {
+  background: #ffffff;
+  width: 420px;
+  padding: 40px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+.logo {
+  width: 70px;
+  margin-bottom: 15px;
+}
+
+h1 {
+  color: #00796b;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #555;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.role-section {
+  display: flex;
+  gap: 20px;
+}
+
+.role-card {
+  flex: 1;
+  padding: 22px 15px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.role-card h2 {
+  margin-bottom: 6px;
+}
+
+.role-card p {
+  font-size: 13px;
+}
+
+/* Teacher Card */
+.teacher {
+  background: #e0f2f1;
+  color: #004d40;
+}
+
+.teacher:hover {
+  background: #00796b;
+  color: #ffffff;
+  transform: translateY(-6px);
+}
+
+/* Student Card */
+.student {
+  background: #e0f7fa;
+  color: #006064;
+}
+
+.student:hover {
+  background: #0097a7;
+  color: #ffffff;
+  transform: translateY(-6px);
+}

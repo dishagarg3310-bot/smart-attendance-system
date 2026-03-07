@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Dashboard</title>
+
+  <script>
+    (function() {
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+      if (!token || role !== "teacher") {
+        window.location.replace("login.html");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/attendance.css">
+  <link rel="stylesheet" href="../components/topbar.css">
+  <link rel="stylesheet" href="../components/sidebar.css">
+</head>
+<body>
+
+  <div id="topbar-container"></div>
+
+  <div class="main">
+    <div id="sidebar-container"></div>
+
+    <div id="mainContent" class="content">
+
+      <!-- Header -->
+      <div class="att-header">
+        <h2>📊 Attendance Dashboard</h2>
+        <p class="class-label">Class: <strong id="className">—</strong></p>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="summary-cards">
+        <div class="sum-card total" id="totalCard" onclick="openModal('total')" style="cursor:pointer;">
+          <p>Total Students</p>
+          <h3 id="totalCount">0</h3>
+          <small>Click to view</small>
+        </div>
+      <div class="sum-card present" id="presentCard" onclick="openModal('present')" style="cursor:pointer;">
+        <p>Present</p>
+        <h3 id="presentCount">0</h3>
+        <small>Click to view</small>
+      </div>
+      <div class="sum-card absent" id="absentCard" onclick="openModal('absent')" style="cursor:pointer;">
+        <p>Absent</p>
+        <h3 id="absentCount">0</h3>
+        <small>Click to view</small>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="studentModal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modalTitle">Students</h3>
+          <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+      <div id="mainContent2">
+
+        <!-- Present Students -->
+        <div class="section-box">
+          <div class="section-title present-title">✅ Present Students</div>
+          <div id="presentList"></div>
+        </div>
+
+        <!-- Absent Students -->
+        <div class="section-box">
+          <div class="section-title absent-title">❌ Absent Students</div>
+          <div id="absentList"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script src="../components/topbar.js"></script>
+  <script src="../components/sidebar.js"></script>
+  <script src="../js/config.js" defer></script>
+  <script src="../js/attendance.js" defer></script>
+
+</body>
+</html>

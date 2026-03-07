@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Smart Attendance</title>
+
+  <!-- Auth check -->
+  <script>
+    (function() {
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+      if (token && role === "teacher") {
+        window.location.replace("teacher-db.html");
+      } else if (token && role === "student") {
+        window.location.replace("stud-db.html");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../components/topbar.css">
+  <link rel="stylesheet" href="../components/sidebar.css">
+  <link rel="stylesheet" href="../css/login.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+  <div class="w-full max-w-sm p-6 bg-white rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-4 text-center">Login</h2>
+    <form id="loginForm" class="flex flex-col gap-4">
+      <input type="email" id="email" placeholder="Email" class="border p-2 rounded">
+      <input type="password" id="password" placeholder="Password" class="border p-2 rounded">
+      <select id="role" class="border p-2 rounded">
+        <option value="">Select Role</option>
+        <option value="teacher">Teacher</option>
+        <option value="student">Student</option>
+      </select>
+      <button type="submit" class="bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
+      <p id="errorMsg" style="color:red; text-align:center;"></p>
+    </form>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/login.js"></script>
+</body>
+</html>

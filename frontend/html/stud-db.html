@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard</title>
+
+  <script>
+    (function() {
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+      if (!token || role !== "student") {
+        window.location.replace("login.html");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/stud-db.css">
+  <link rel="stylesheet" href="../components/topbar.css">
+  <link rel="stylesheet" href="../components/sidebar.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <div id="topbar-container"></div>
+
+  <!-- Bell icon — fixed position -->
+  <div class="bell-wrapper">
+    <span class="bell-icon" onclick="toggleNotifPanel()">🔔</span>
+    <span id="bellCount" class="bell-count"></span>
+    <div id="notifPanel" class="notif-panel" style="display:none;">
+      <div class="notif-header">
+        <span>🔔 Notifications</span>
+        <button onclick="markAllRead()">Mark all read</button>
+      </div>
+      <div id="notifList"></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div id="sidebar-container"></div>
+
+    <div id="mainContent" class="content">
+      <section>
+
+        <div class="dashboard-header">
+          <h2>Student Dashboard</h2>
+          <p class="welcome">Welcome, <span id="studentName">Student</span>! 👋</p>
+        </div>
+
+        <!-- Low Attendance Warning -->
+        <div class="attendance-warning" id="attendanceWarning"></div>
+
+        <div class="cards">
+          <div class="card">
+            <p>Attendance %</p>
+            <h3 id="attendancePercent">0%</h3>
+          </div>
+          <div class="card">
+            <p>Total Classes</p>
+            <h3 id="totalClasses">0</h3>
+          </div>
+          <div class="card">
+            <p>Present</p>
+            <h3 id="presentCount">0</h3>
+          </div>
+          <div class="card">
+            <p>Absent</p>
+            <h3 id="absentCount">0</h3>
+          </div>
+        </div>
+
+        <div class="qr-section">
+          <h3>Mark Your Attendance</h3>
+          <p>Click below to scan QR code and mark your attendance</p>
+          <button class="scan-btn" onclick="window.location.href='student-scan.html'">
+            <i class="fas fa-qrcode"></i> Scan QR Code
+          </button>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+  <script src="../components/topbar.js"></script>
+  <script src="../components/sidebar.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/push-subscribe.js"></script>
+  <script src="../js/stud-db.js"></script>
+
+</body>
+</html>

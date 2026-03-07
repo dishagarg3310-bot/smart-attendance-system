@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Attendance System</title>
+
+  <!-- Auth check -->
+  <script>
+    (function() {
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+      if (token && role === "teacher") {
+        window.location.replace("html/teacher-db.html");
+      } else if (token && role === "student") {
+        window.location.replace("html/stud-db.html");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/role-select.css">
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="card-container">
+
+      <img src="assets/logo.png" alt="Logo" class="logo">
+
+      <h1>Smart Attendance System</h1>
+      <p class="subtitle">Select your role to continue</p>
+
+      <div class="role-section">
+        <div class="role-card teacher" onclick="goTeacher()">
+          <h2>Teacher</h2>
+          <p>Manage classes & attendance</p>
+        </div>
+
+        <div class="role-card student" onclick="goStudent()">
+          <h2>Student</h2>
+          <p>View attendance records</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/role-select.js"></script>
+</body>
+</html>

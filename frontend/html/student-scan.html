@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scan QR</title>
+
+  <script>
+    (function() {
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+      if (!token || role !== "student") {
+        window.location.replace("login.html");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/student-scan.css">
+  <link rel="stylesheet" href="../components/topbar.css">
+  <link rel="stylesheet" href="../components/sidebar.css">
+</head>
+<body>
+
+  <div id="topbar-container"></div>
+
+  <div class="main">
+    <div id="sidebar-container"></div>
+
+    <div id="mainContent" class="content">
+      <section>
+
+        <div class="dashboard-header">
+          <h2>📷 Scan QR Code</h2>
+          <p>Camera se teacher ka QR scan karo</p>
+        </div>
+
+        <div class="scan-card">
+
+          <!-- Scanner Box -->
+          <div id="qr-reader"></div>
+
+          <!-- Buttons -->
+          <div class="btn-group">
+            <button class="start-btn" id="startBtn">▶ Camera Start Karo</button>
+            <button class="stop-btn" id="stopBtn" style="display:none;">⏹ Camera Band Karo</button>
+          </div>
+
+          <!-- Result -->
+          <div id="resultArea"></div>
+
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="../components/topbar.js"></script>
+  <script src="../components/sidebar.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/student-scan.js"></script>
+
+</body>
+</html>

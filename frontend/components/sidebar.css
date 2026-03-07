@@ -1,0 +1,61 @@
+/* ================= MAIN LAYOUT ================= */
+.main {
+  display: flex;
+  margin-top: 60px;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  min-height: calc(100vh - 60px);
+  background: linear-gradient(to bottom, #0f766e, #14b8a6);
+  padding-top: 20px;
+  transition: 0.3s;
+  flex-shrink: 0;
+}
+
+.sidebar.hide {
+  width: 0;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 15px 20px;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  transition: 0.3s;
+  display: block;
+  background: none;
+  border: none;
+}
+
+.sidebar ul li:hover {
+  background: rgba(255,255,255,0.2);
+  padding-left: 28px;
+}
+
+/* ================= CONTENT ================= */
+.content {
+  flex: 1;
+  padding: 30px;
+  transition: 0.3s;
+  min-height: calc(100vh - 60px);
+}
+
+.content.full {
+  margin-left: 0;
+}
+.menu-btn {
+  cursor: pointer;
+}

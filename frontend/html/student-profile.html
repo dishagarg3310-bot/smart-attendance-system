@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Profile</title>
+
+  <script>
+    (function() {
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+      if (!token || role !== "student") {
+        window.location.replace("login.html");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/student-profile.css">
+  <link rel="stylesheet" href="../components/topbar.css">
+  <link rel="stylesheet" href="../components/sidebar.css">
+</head>
+<body>
+
+  <div id="topbar-container"></div>
+
+  <div class="main">
+    <div id="sidebar-container"></div>
+
+    <div id="mainContent" class="content">
+      <div class="profile-card">
+
+        <h2>Student Profile</h2>
+
+        <div class="profile-section">
+          <div class="profile-avatar">
+            <span id="initials">S</span>
+          </div>
+
+          <div class="profile-info">
+            <p><strong>Name:</strong> <span id="nameText">Loading...</span></p>
+            <p><strong>Email:</strong> <span id="emailText">Loading...</span></p>
+            <p><strong>Class:</strong> <span id="classText">Loading...</span></p>
+            <p><strong>Student ID:</strong> <span id="idText">—</span></p>
+          </div>
+        </div>
+
+        <button id="editBtn">Edit Profile</button>
+
+        <div class="edit-section" id="editSection" style="display:none;">
+          <input type="text" id="nameInput" placeholder="Update Name">
+          <input type="email" id="emailInput" placeholder="Update Email">
+          <input type="text" id="classInput" placeholder="Update Class">
+          <button id="saveBtn">Save Changes</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="../components/topbar.js"></script>
+  <script src="../components/sidebar.js"></script>
+  <script src="../js/config.js" defer></script>
+  <script src="../js/student-profile.js" defer></script>
+
+</body>
+</html>

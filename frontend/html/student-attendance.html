@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Attendance</title>
+
+  <script>
+    (function() {
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+      if (!token || role !== "student") {
+        window.location.replace("login.html");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/student-attendance.css">
+  <link rel="stylesheet" href="../components/topbar.css">
+  <link rel="stylesheet" href="../components/sidebar.css">
+</head>
+<body>
+
+  <div id="topbar-container"></div>
+
+  <div class="main">
+    <div id="sidebar-container"></div>
+
+    <div id="mainContent" class="content">
+      <section>
+
+        <div class="dashboard-header">
+          <h2>📋 My Attendance</h2>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="cards">
+          <div class="card">
+            <p>Total Classes</p>
+            <h3 id="totalClasses">0</h3>
+          </div>
+          <div class="card">
+            <p>Present</p>
+            <h3 id="presentCount">0</h3>
+          </div>
+          <div class="card">
+            <p>Absent</p>
+            <h3 id="absentCount">0</h3>
+          </div>
+          <div class="card">
+            <p>Attendance %</p>
+            <h3 id="attendancePercent">0%</h3>
+          </div>
+        </div>
+
+        <!-- View Toggle -->
+        <div class="view-toggle">
+          <button class="toggle-btn active" id="tableViewBtn" onclick="switchView('table')">📋 Table View</button>
+          <button class="toggle-btn" id="calendarViewBtn" onclick="switchView('calendar')">📅 Calendar View</button>
+        </div>
+
+        <!-- Table View -->
+        <div id="tableView">
+          <div id="subjectTabs" class="subject-tabs"></div>
+          <div id="subjectWiseSection"></div>
+        </div>
+
+        <!-- Calendar View -->
+        <div id="calendarView" style="display:none;">
+          <div class="calendar-container">
+            <div class="calendar-nav">
+              <button onclick="changeMonth(-1)">◀</button>
+              <span id="calendarTitle">March 2026</span>
+              <button onclick="changeMonth(1)">▶</button>
+            </div>
+            <div class="calendar-legend">
+              <span class="legend-item"><span class="dot green"></span> Present</span>
+              <span class="legend-item"><span class="dot red"></span> Absent</span>
+              <span class="legend-item"><span class="dot grey"></span> No Class</span>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+          </div>
+
+          <!-- Click pe detail -->
+          <div id="dayDetail" class="day-detail" style="display:none;">
+            <h4 id="dayDetailTitle"></h4>
+            <div id="dayDetailBody"></div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+  <script src="../components/topbar.js"></script>
+  <script src="../components/sidebar.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/student-attendance.js"></script>
+
+</body>
+</html>

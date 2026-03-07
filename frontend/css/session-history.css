@@ -1,0 +1,205 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #e6fffa, #f0fdfa);
+  min-height: 100vh;
+}
+
+.dashboard-header h2 {
+  color: #0f766e;
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+
+/* CARDS */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  text-align: center;
+  transition: 0.3s;
+}
+
+.card:hover { transform: translateY(-4px); }
+.card p { color: #6b7280; font-size: 13px; margin: 0; }
+.card h3 { color: #0f766e; font-size: 28px; margin: 8px 0 0 0; }
+
+/* MONTH FILTER */
+.month-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.month-btn {
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1.5px solid #0f766e;
+  background: white;
+  color: #0f766e;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 500;
+}
+
+.month-btn.active, .month-btn:hover {
+  background: #0f766e;
+  color: white;
+}
+
+/* SESSION CARD */
+.session-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  border-left: 5px solid #0f766e;
+  transition: 0.2s;
+}
+
+.session-card:hover { transform: translateX(4px); }
+.active-session { border-left-color: #16a34a; }
+
+/* Session Top */
+.session-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.session-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.session-subject {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f766e;
+}
+
+.session-class {
+  font-size: 13px;
+  color: #4b5563;
+}
+
+/* Badges */
+.session-badge {
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-active { background: #dcfce7; color: #16a34a; }
+.badge-closed { background: #f3f4f6; color: #6b7280; }
+
+/* Meta */
+.session-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Stats */
+.session-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-num {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 11px;
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+.present-box { background: #f0fdf4; }
+.present-box .stat-num { color: #16a34a; }
+.present-box .stat-label { color: #16a34a; }
+
+.absent-box { background: #fff5f5; }
+.absent-box .stat-num { color: #dc2626; }
+.absent-box .stat-label { color: #dc2626; }
+
+.total-box { background: #f0f9ff; }
+.total-box .stat-num { color: #0369a1; }
+.total-box .stat-label { color: #0369a1; }
+
+.percent-box { background: #fefce8; }
+.percent-box .stat-num { color: #ca8a04; }
+.percent-box .stat-label { color: #ca8a04; }
+
+/* Present Students */
+.present-students { margin-top: 4px; }
+
+.students-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 8px 0;
+}
+
+.students-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.student-chip {
+  background: #f0fdfa;
+  border: 1px solid #99f6e4;
+  color: #0f766e;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Empty */
+.empty-msg {
+  text-align: center;
+  color: #9ca3af;
+  padding: 30px;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .session-stats { grid-template-columns: repeat(2, 1fr); }
+  .session-meta { gap: 10px; }
+}

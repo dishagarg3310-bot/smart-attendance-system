@@ -1,0 +1,87 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #e6fffa, #f0fdfa);
+  min-height: 100vh;
+}
+
+.profile-card {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 95%;
+  max-width: 700px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+  margin: 30px auto;
+}
+
+h2 {
+  margin-bottom: 25px;
+  color: #0f766e;
+}
+
+.profile-section {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-info p {
+  margin: 8px 0;
+  color: #444;
+}
+
+.edit-section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-section input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-section button {
+  width: 100%;
+}
+
+button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #0f766e, #14b8a6);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+#editBtn {
+  margin-top: 15px;
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Dashboard</title>
+
+  <script>
+    (function() {
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+      if (!token || role !== "teacher") {
+        window.location.replace("login.html");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/teacher-db.css">
+  <link rel="stylesheet" href="../components/topbar.css">
+  <link rel="stylesheet" href="../components/sidebar.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <div id="topbar-container"></div>
+
+  <div class="main">
+    <div id="sidebar-container"></div>
+
+    <div id="mainContent" class="content">
+      <section>
+
+        <div class="dashboard-header">
+          <h2>Teacher Dashboard</h2>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="cards">
+          <div class="card">
+            <p>Session</p>
+            <h3 id="session-status">INACTIVE</h3>
+          </div>
+          <div class="card">
+            <p>Present</p>
+            <h3 id="present-count">0</h3>
+          </div>
+          <div class="card">
+            <p>Time</p>
+            <h3 id="session-timer">00:00:00</h3>
+          </div>
+          <div class="card">
+            <p>Total Sessions</p>
+            <h3 id="total-sessions">0</h3>
+          </div>
+        </div>
+
+        <!-- Session Panel -->
+        <div class="session-panel">
+          <h3>Attendance Session</h3>
+          <div class="session-info">
+            <input type="text" id="subjectInput" placeholder="Subject (e.g. DBMS)" class="session-input">
+            <input type="text" id="classInput" placeholder="Class (e.g. BCA 3rd Year)" class="session-input">
+          </div>
+          <button class="start-btn" id="startSession">Start Session</button>
+        </div>
+
+        <!-- QR Panel -->
+        <div class="qr-panel">
+          <h3>Scan QR to Mark Attendance</h3>
+          <div class="qr-box" id="qrCode">QR CODE</div>
+          <p id="qrExpire">QR expires in 05:00</p>
+        </div>
+
+        <!-- Session History -->
+        <div class="history-panel">
+          <h3>📋 Session History</h3>
+          <div id="sessionHistory">
+            <p class="empty-msg">Koi session history nahi hai abhi</p>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+  <script src="../components/topbar.js"></script>
+  <script src="../components/sidebar.js"></script>
+  <script src="../js/config.js" defer></script>
+  <script src="../js/teacher-db.js" defer></script>
+
+</body>
+</html>
