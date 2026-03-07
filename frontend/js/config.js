@@ -2,7 +2,7 @@
 // Ab automatically current URL detect hoga
 // Chahe localhost ho, ya ngrok ka koi bhi URL - sab kaam karega
 
-const API = window.location.origin;
+const API = "https://smart-attendance-system-3-xtyv.onrender.com";
 
 async function fetchAPI(url, options = {}) {
   const token = localStorage.getItem("token");
