@@ -1,8 +1,4 @@
-// ✅ FIX: Hardcoded ngrok URL hatao
-// Ab automatically current URL detect hoga
-// Chahe localhost ho, ya ngrok ka koi bhi URL - sab kaam karega
-
-const API = "https://smart-attendance-system-3-xtyv.onrender.com";
+const API = window.location.origin;
 
 async function fetchAPI(url, options = {}) {
   const token = localStorage.getItem("token");

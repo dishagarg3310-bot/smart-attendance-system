@@ -1,4 +1,4 @@
-const VAPID_PUBLIC_KEY = "YAHAN_APNI_PUBLIC_KEY_DAALO";
+const VAPID_PUBLIC_KEY = "BLbatwvx_qVRCJFr_QgYaxRsJ6gE-vKA12Wy4aDVLaYYADvNbYbkhKU0VBIeY0RX2OQQ7aRlq3YdKrC7eF6l0Vs";
 
 async function subscribeToPush() {
   if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
