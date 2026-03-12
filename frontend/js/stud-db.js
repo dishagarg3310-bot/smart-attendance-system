@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           warningEl.style.borderColor = "#d97706";
           warningEl.style.color = "#92400e";
           warningEl.innerHTML = `
-            <span>🔔 your attendance <strong>${percent}%</strong> is more than  — 75% !</span>
+            <span>🔔 your attendance <strong>${percent}%</strong> that is more than  — 75% !</span>
           `;
         } else {
           warningEl.style.display = "none";
