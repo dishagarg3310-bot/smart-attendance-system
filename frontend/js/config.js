@@ -1,4 +1,4 @@
-const API = window.location.origin;
+const API = "https://smart-attendance-system-11-jbgo.onrender.com";
 
 async function fetchAPI(url, options = {}) {
   const token = localStorage.getItem("token");
