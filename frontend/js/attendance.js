@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       if (data.length === 0) {
         document.getElementById("mainContent2").innerHTML =
-          `<p class="empty-msg">Abhi koi session nahi hua hai</p>`;
+          `<p class="empty-msg">No session has been conducted yet</p>`;
         return;
       }
 
@@ -60,23 +60,26 @@ document.addEventListener("DOMContentLoaded", async function () {
               </div>
             </div>`;
         }).join("")
-      : `<p class="empty-msg">Koi student present nahi hai</p>`;
+      : `<p class="empty-msg">No students present</p>`;
 
     // Absent list
     const absentList = document.getElementById("absentList");
     absentList.innerHTML = absentStudents.length > 0
-      ? absentStudents.map(s => `
+      ? absentStudents.map(s => {
+          const color = s.percent >= 75 ? "#16a34a" : s.percent >= 50 ? "#d97706" : "#dc2626";
+          return `
           <div class="student-item absent-item" onclick="openStudentProfile('${s._id}')" style="cursor:pointer;">
             <div class="student-info">
               <span class="student-name">👤 ${s.name}</span>
               <span class="student-email">${s.email}</span>
             </div>
             <div class="student-stats">
-              <span class="stat-chip">0/${s.totalClasses} Classes</span>
-              <span class="stat-chip percent-chip" style="color:#dc2626;border-color:#dc2626">0%</span>
+              <span class="stat-chip">${s.present}/${s.totalClasses} Classes</span>
+              <span class="stat-chip percent-chip" style="color:${color};border-color:${color}">${s.percent}%</span>
             </div>
-          </div>`).join("")
-      : `<p class="empty-msg">Sab students present hain ✅</p>`;
+          </div>`;
+        }).join("")
+      : `<p class="empty-msg">All students are present ✅</p>`;
   }
 
   // ========== STUDENT PROFILE MODAL ==========
@@ -128,7 +131,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         </div>
 
         <div style="padding:12px 16px;background:#f9fafb;border-radius:12px;margin-bottom:20px;font-size:14px;color:#374151;">
-          🕐 <strong>Last Attended:</strong> ${data.lastAttended || "Kabhi nahi aaya"}
+          🕐 <strong>Last Attended:</strong> ${data.lastAttended || "Never attended"}
         </div>
 
         <div style="font-size:15px;font-weight:700;color:#374151;margin-bottom:12px;">📊 Subject-wise Attendance</div>
@@ -148,7 +151,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                   </div>
                 </div>`;
             }).join("")
-          : `<p style="color:#9ca3af;text-align:center;">Koi attendance record nahi</p>`
+          : `<p style="color:#9ca3af;text-align:center;">No attendance record found</p>`
         }
       `;
     } catch (err) {
@@ -170,7 +173,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       modalBody.innerHTML = `<p style="color:#6b7280;margin-bottom:15px;">Total: <strong>${allStudents.length}</strong> students</p>`;
 
       if (allStudents.length === 0) {
-        modalBody.innerHTML += `<p class="empty-msg">Koi student nahi mila</p>`;
+        modalBody.innerHTML += `<p class="empty-msg">No students found</p>`;
         return;
       }
 
@@ -180,8 +183,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             <div class="modal-student-name">👤 ${s.name}</div>
             <div class="modal-student-email">${s.email}</div>
           </div>
-          <span class="${s.present > 0 ? 'badge-present' : 'badge-absent'}">
-            ${s.present > 0 ? `${s.percent}% Present` : 'Never Present'}
+          <span class="${s.presentInLatest ? 'badge-present' : 'badge-absent'}">
+            ${s.presentInLatest ? `${s.percent}% Present` : 'Absent'}
           </span>
         </div>
       `).join("");
@@ -191,7 +194,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       modalBody.innerHTML = `<p style="color:#6b7280;margin-bottom:15px;">Total: <strong>${presentStudents.length}</strong> students</p>`;
 
       if (presentStudents.length === 0) {
-        modalBody.innerHTML += `<p class="empty-msg">Koi student present nahi hai</p>`;
+        modalBody.innerHTML += `<p class="empty-msg">No students present</p>`;
         return;
       }
 
@@ -214,7 +217,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       modalBody.innerHTML = `<p style="color:#6b7280;margin-bottom:15px;">Total: <strong>${absentStudents.length}</strong> students</p>`;
 
       if (absentStudents.length === 0) {
-        modalBody.innerHTML += `<p class="empty-msg">Sab students present hain ✅</p>`;
+        modalBody.innerHTML += `<p class="empty-msg">All students are present ✅</p>`;
         return;
       }
 
@@ -224,7 +227,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             <div class="modal-student-name">👤 ${s.name}</div>
             <div class="modal-student-email">${s.email}</div>
           </div>
-          <span class="badge-absent">Never Present</span>
+          <span class="badge-absent">${s.present}/${s.totalClasses} — ${s.percent}%</span>
         </div>
       `).join("");
     }
