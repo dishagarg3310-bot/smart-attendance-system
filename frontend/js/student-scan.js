@@ -71,7 +71,7 @@ async function onScanSuccess(decodedText) {
       return;
     }
 
-    resultArea.innerHTML = `<div class="result-info">⏳ Attendance marked...</div>`;
+    resultArea.innerHTML = `<div class="result-info">⏳ Attendance marked!...</div>`;
 
     const res = await fetchAPI("/api/attendance/mark", {
       method: "POST",
