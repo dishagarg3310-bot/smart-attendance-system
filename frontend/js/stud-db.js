@@ -50,8 +50,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           const needed = Math.ceil((0.75 * total - present) / (1 - 0.75));
           warningEl.style.display = "flex";
           warningEl.innerHTML = `
-            <span>⚠️ Aapki attendance <strong>${percent}%</strong> hai jo 75% se kam hai! 
-            Attendance badhane ke liye agle <strong>${needed}</strong> classes zaroor attend karo.</span>
+            <span>⚠️ your attendance <strong>${percent}%</strong> less than 75%! 
+            For more Attendance <strong>${needed}</strong> attend classes .</span>
           `;
         } else if (total > 0 && percent < 85) {
           warningEl.style.display = "flex";
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           warningEl.style.borderColor = "#d97706";
           warningEl.style.color = "#92400e";
           warningEl.innerHTML = `
-            <span>🔔 Aapki attendance <strong>${percent}%</strong> hai — 75% se upar hai lekin dhyan rakho!</span>
+            <span>🔔 your attendance <strong>${percent}%</strong> is more than  — 75% !</span>
           `;
         } else {
           warningEl.style.display = "none";
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               <div class="notif-time">${new Date(n.createdAt).toLocaleTimeString("en-IN", {hour:"2-digit", minute:"2-digit"})}</div>
             </div>
           `).join("")
-        : `<p style="text-align:center;color:#9ca3af;padding:15px;">Koi notification nahi</p>`;
+        : `<p style="text-align:center;color:#9ca3af;padding:15px;">No notification</p>`;
     } catch (err) {
       console.error(err);
     }
