@@ -10,7 +10,7 @@ const resultArea = document.getElementById("resultArea");
 // Camera start karo
 startBtn.addEventListener("click", () => {
   scanDone = false;
-  resultArea.innerHTML = `<div class="result-info">📷 Camera shuru ho raha hai...</div>`;
+  resultArea.innerHTML = `<div class="result-info">📷 Camera start...</div>`;
 
   html5QrCode = new Html5Qrcode("qr-reader");
 
@@ -25,9 +25,9 @@ startBtn.addEventListener("click", () => {
   ).then(() => {
     startBtn.style.display = "none";
     stopBtn.style.display = "inline-block";
-    resultArea.innerHTML = `<div class="result-info">🔍 QR Code ke saamne camera rakho...</div>`;
+    resultArea.innerHTML = `<div class="result-info">🔍 Set Camera in front of QR Code...</div>`;
   }).catch(err => {
-    resultArea.innerHTML = `<div class="result-error">❌ Camera nahi khula: ${err}<br><small>Browser ko camera permission do!</small></div>`;
+    resultArea.innerHTML = `<div class="result-error">❌ Camera not opened: ${err}<br><small>Give Camera permission to browser!</small></div>`;
   });
 });
 
@@ -58,7 +58,7 @@ async function onScanSuccess(decodedText) {
     try {
       qrData = JSON.parse(decodedText);
     } catch {
-      resultArea.innerHTML = `<div class="result-error">❌ Invalid QR Code! Ye Smart Attendance ka QR nahi hai.</div>`;
+      resultArea.innerHTML = `<div class="result-error">❌ Invalid QR Code! That is not a Smart Attendance QR Code.</div>`;
       scanDone = false;
       return;
     }
@@ -66,12 +66,12 @@ async function onScanSuccess(decodedText) {
     const sessionId = qrData.sessionId;
 
     if (!sessionId) {
-      resultArea.innerHTML = `<div class="result-error">❌ QR mein Session ID nahi hai!</div>`;
+      resultArea.innerHTML = `<div class="result-error">❌ No Session Id in QR!</div>`;
       scanDone = false;
       return;
     }
 
-    resultArea.innerHTML = `<div class="result-info">⏳ Attendance mark ho rahi hai...</div>`;
+    resultArea.innerHTML = `<div class="result-info">⏳ Attendance marked...</div>`;
 
     const res = await fetchAPI("/api/attendance/mark", {
       method: "POST",
@@ -84,7 +84,7 @@ async function onScanSuccess(decodedText) {
       resultArea.innerHTML = `
         <div class="result-success">
           ✅ ${data.message}<br>
-          <small>Dashboard pe jaao attendance dekhne ke liye</small>
+          <small>Go To the Dashboard to Check Attendance</small>
         </div>
       `;
     } else {
