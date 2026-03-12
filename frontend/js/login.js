@@ -13,13 +13,7 @@ form.addEventListener("submit", async e => {
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
-  const role = document.getElementById("role").value;
   const errorMsg = document.getElementById("errorMsg");
-
-  if (!role) {
-    errorMsg.innerText = "Please select a role!";
-    return;
-  }
 
   try {
     const res = await fetchAPI("/api/auth/login", {
@@ -30,11 +24,6 @@ form.addEventListener("submit", async e => {
     const data = await res.json();
 
     if (res.ok) {
-      if (data.role !== role) {
-        errorMsg.innerText = `You are not registered as ${role}!`;
-        return;
-      }
-
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("name", data.name);
@@ -49,6 +38,6 @@ form.addEventListener("submit", async e => {
     }
   } catch (err) {
     console.error(err);
-    errorMsg.innerText = "Server not reachable";
+    errorMsg.innerText = "Connection failed: " + err.message;
   }
 });
