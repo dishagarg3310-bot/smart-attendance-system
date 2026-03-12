@@ -62,7 +62,7 @@ router.post("/session-started", auth, async (req, res) => {
     // Sabko notification bhejo
     const payload = JSON.stringify({
       title: "📢 Class Shuru Ho Gayi!",
-      body: `${subject} — ${className} ki attendance le rahe hain!`,
+      body: `${subject} — ${className} take attendance!`,
       sessionId
     });
 
@@ -79,7 +79,7 @@ router.post("/session-started", auth, async (req, res) => {
       }
     }
 
-    res.json({ message: `${sent} students ko notification bheja!` });
+    res.json({ message: `${sent} send Notification To Students!` });
   } catch (err) {
     console.error("NOTIFY ERROR:", err);
     res.status(500).json({ message: "Server error" });

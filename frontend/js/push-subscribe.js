@@ -2,7 +2,7 @@ const VAPID_PUBLIC_KEY = "BLbatwvx_qVRCJFr_QgYaxRsJ6gE-vKA12Wy4aDVLaYYADvNbYbkhK
 
 async function subscribeToPush() {
   if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-    console.log("Push notifications supported nahi hain");
+    console.log("Push notifications not supported ");
     return;
   }
 
