@@ -5,19 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Login</title>
   <link rel="stylesheet" href="../css/teacher-login.css">
+  <link rel="stylesheet" href="../css/student-login.css">
 </head>
 <body>
 
   <div class="login-container">
-    <h2>Student Login</h2>
+    <h2>Student Portal</h2>
 
-    <form id="studentLoginForm">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('login')">Login</div>
+      <div class="tab" onclick="switchTab('signup')">Sign Up</div>
+    </div>
 
-    <p id="errorMsg"></p>
+    <!-- Login Form -->
+    <div class="form-section active" id="loginSection">
+      <form id="studentLoginForm">
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+      <p id="errorMsg" style="color:red; text-align:center;"></p>
+    </div>
+
+    <!-- Sign Up Form -->
+    <div class="form-section" id="signupSection">
+      <form id="studentSignupForm">
+        <input type="text" id="signupName" placeholder="Full Name" required />
+        <input type="email" id="signupEmail" placeholder="Email" required />
+        <input type="password" id="signupPassword" placeholder="Password" required />
+        <select id="signupClass">
+          <option value="">Select Class</option>
+          <option value="BCA 1st Year">BCA 1st Year</option>
+          <option value="BCA 2nd Year">BCA 2nd Year</option>
+          <option value="BCA 3rd Year">BCA 3rd Year</option>
+          <option value="MCA 1st Year">MCA 1st Year</option>
+          <option value="MCA 2nd Year">MCA 2nd Year</option>
+        </select>
+        <button type="submit">Sign Up</button>
+      </form>
+      <p id="signupMsg" style="text-align:center;"></p>
+    </div>
+
   </div>
 
   <script src="../js/config.js" defer></script>

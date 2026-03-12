@@ -5,11 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Teacher Login</title>
   <link rel="stylesheet" href="../css/teacher-login.css">
+
 </head>
 <body>
 
   <div class="login-container">
     <h2>Teacher Login</h2>
+
+    <div class="demo-box">
+      <p class="demo-title">🎯 Demo Credentials</p>
+      <p><strong>Email:</strong> priya@gmail.com</p>
+      <p><strong>Password:</strong> priya123</p>
+      <button class="fill-demo" onclick="fillDemo()">Use Demo Account</button>
+    </div>
 
     <form id="teacherLoginForm">
       <input type="email" id="email" placeholder="Email" required />
@@ -20,7 +28,13 @@
     <p id="errorMsg"></p>
   </div>
 
+  <script>
+    function fillDemo() {
+      document.getElementById('email').value = 'priya@gmail.com';
+      document.getElementById('password').value = 'priya123';
+    }
+  </script>
   <script src="../js/config.js" defer></script>
-  <script src="../js/teacher-login.js" defer></script>
+  <script src="../js/login.js" defer></script>
 </body>
 </html>
