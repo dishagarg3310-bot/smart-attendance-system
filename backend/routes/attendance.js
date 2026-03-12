@@ -23,20 +23,20 @@ router.post("/mark", auth, async (req, res) => {
     const studentId = req.user.id;
 
     const student = await User.findById(studentId);
-    if (!student) return res.status(404).json({ message: "Student nahi mila!" });
+    if (!student) return res.status(404).json({ message: "Student not found!" });
 
     const session = await Session.findById(sessionId);
-    if (!session) return res.status(404).json({ message: "Session nahi mili! QR invalid hai." });
-    if (!session.isActive) return res.status(400).json({ message: "Session band ho gayi hai!" });
+    if (!session) return res.status(404).json({ message: "Session not found! QR is invalid." });
+    if (!session.isActive) return res.status(400).json({ message: "Session has ended!" });
 
     if (student.className && session.className !== student.className) {
       return res.status(400).json({
-        message: `Ye session aapki class ke liye nahi hai! Aapki class: ${student.className}`
+        message: `This session is not for your class! Your class: ${student.className}`
       });
     }
 
     const alreadyMarked = await Attendance.findOne({ sessionId, studentId });
-    if (alreadyMarked) return res.status(400).json({ message: "Aapki attendance pehle se mark hai!" });
+    if (alreadyMarked) return res.status(400).json({ message: "Your attendance is already marked!" });
 
     await new Attendance({
       sessionId,
@@ -49,7 +49,7 @@ router.post("/mark", auth, async (req, res) => {
     }).save();
 
     res.status(201).json({
-      message: `Attendance mark ho gayi! Subject: ${session.subject}, Class: ${student.className || session.className}`
+      message: `Attendance marked! Subject: ${session.subject}, Class: ${student.className || session.className}`
     });
   } catch (err) {
     console.error("MARK ERROR:", err);
@@ -136,37 +136,32 @@ router.get("/session-count/:sessionId", auth, async (req, res) => {
   }
 });
 
-// ✅ Teacher ke liye - class wise all students attendance summary
+// ✅ class-summary — latest session present/absent
 router.get("/class-summary", auth, async (req, res) => {
   try {
     const teacherId = req.user.id;
-
-    // Teacher ki profile se className lo
     const teacher = await User.findById(teacherId);
-    if (!teacher || !teacher.className) {
-      return res.json([]);
-    }
+    if (!teacher || !teacher.className) return res.json([]);
 
     const className = teacher.className;
+    const allStudents = await User.find({ role: "student", className }).select("name email className").lean();
+    if (allStudents.length === 0) return res.json([{ className, students: [] }]);
 
-    // Is class ke SAARE students
-    const allStudents = await User.find({
-      role: "student",
-      className: className
-    }).select("name email className").lean();
-
-    if (allStudents.length === 0) {
-      return res.json([{
-        className,
-        students: []
-      }]);
-    }
-
-    // Teacher ke saare sessions
     const sessions = await Session.find({ teacherId }).lean();
     const totalSessions = sessions.length;
 
-    // Har student ka present count
+    // Latest session
+    const latestSession = sessions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+    let latestPresentIds = [];
+    if (latestSession) {
+      const latestRecords = await Attendance.find({
+        sessionId: latestSession._id,
+        status: "present"
+      }).lean();
+      latestPresentIds = latestRecords.map(r => r.studentId.toString());
+    }
+
     const studentSummary = await Promise.all(allStudents.map(async (student) => {
       const presentCount = await Attendance.countDocuments({
         studentId: student._id,
@@ -174,9 +169,7 @@ router.get("/class-summary", auth, async (req, res) => {
         status: "present"
       });
 
-      const percent = totalSessions > 0
-        ? Math.round((presentCount / totalSessions) * 100)
-        : 0;
+      const percent = totalSessions > 0 ? Math.round((presentCount / totalSessions) * 100) : 0;
 
       return {
         _id: student._id,
@@ -185,15 +178,12 @@ router.get("/class-summary", auth, async (req, res) => {
         totalClasses: totalSessions,
         present: presentCount,
         absent: totalSessions - presentCount,
-        percent
+        percent,
+        presentInLatest: latestPresentIds.includes(student._id.toString())
       };
     }));
 
-    res.json([{
-      className,
-      students: studentSummary
-    }]);
-
+    res.json([{ className, students: studentSummary }]);
   } catch (err) {
     console.error("CLASS SUMMARY ERROR:", err);
     res.status(500).json({ message: "Server error" });
@@ -204,7 +194,7 @@ router.get("/class-summary", auth, async (req, res) => {
 router.get("/session-students/:sessionId", auth, async (req, res) => {
   try {
     const session = await Session.findById(req.params.sessionId);
-    if (!session) return res.status(404).json({ message: "Session nahi mili!" });
+    if (!session) return res.status(404).json({ message: "Session not found!" });
 
     const allStudents = await User.find({ role: "student", className: session.className }).select("name email className").lean();
     const presentRecords = await Attendance.find({ sessionId: req.params.sessionId, status: "present" }).lean();
@@ -275,43 +265,27 @@ router.get("/session-history-detail", auth, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 // ✅ session-history-full
 router.get("/session-history-full", auth, async (req, res) => {
   try {
     const teacherId = req.user.id;
-
-    const sessions = await Session.find({ teacherId })
-      .sort({ createdAt: -1 })
-      .lean();
-
+    const sessions = await Session.find({ teacherId }).sort({ createdAt: -1 }).lean();
     if (sessions.length === 0) return res.json([]);
 
-    // Teacher ki class ke total students
-    const teacher = await User.findById(teacherId);
-
     const history = await Promise.all(sessions.map(async (session) => {
-      // Present records with student names
-      const presentRecords = await Attendance.find({
-        sessionId: session._id,
-        status: "present"
-      }).lean();
-
+      const presentRecords = await Attendance.find({ sessionId: session._id, status: "present" }).lean();
       const studentIds = presentRecords.map(r => r.studentId);
-      const presentUsers = await User.find({ _id: { $in: studentIds } })
-        .select("name").lean();
-
+      const presentUsers = await User.find({ _id: { $in: studentIds } }).select("name").lean();
       const presentCount = presentRecords.length;
       const presentStudents = presentUsers.map(r => r.name);
 
-      // Total students in this session's class
       const totalStudents = await User.countDocuments({
         role: "student",
         className: { $regex: new RegExp(`^${session.className}$`, "i") }
       });
 
       const absentCount = Math.max(0, totalStudents - presentCount);
-
-      // Duration
       const start = new Date(session.createdAt);
       const end = session.isActive ? new Date() : new Date(session.updatedAt);
       const duration = Math.floor((end - start) / 1000);
@@ -335,6 +309,7 @@ router.get("/session-history-full", auth, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 // ✅ Student profile for teacher
 router.get("/student-profile/:studentId", auth, async (req, res) => {
   try {
@@ -342,33 +317,23 @@ router.get("/student-profile/:studentId", auth, async (req, res) => {
     const teacherId = req.user.id;
 
     const student = await User.findById(studentId).select("name email className").lean();
-    if (!student) return res.status(404).json({ message: "Student nahi mila!" });
+    if (!student) return res.status(404).json({ message: "Student not found!" });
 
-    // Teacher ke saare sessions
     const sessions = await Session.find({ teacherId }).lean();
-
-    // Subject-wise attendance
     const subjects = [...new Set(sessions.map(s => s.subject))];
 
     const subjectStats = await Promise.all(subjects.map(async (subject) => {
       const totalSessions = sessions.filter(s => s.subject === subject).length;
-      const presentCount = await Attendance.countDocuments({
-        studentId,
-        teacherId,
-        subject,
-        status: "present"
-      });
+      const presentCount = await Attendance.countDocuments({ studentId, teacherId, subject, status: "present" });
       const percent = totalSessions > 0 ? Math.round((presentCount / totalSessions) * 100) : 0;
       return { subject, present: presentCount, total: totalSessions, percent };
     }));
 
-    // Overall stats
     const totalPresent = subjectStats.reduce((sum, s) => sum + s.present, 0);
     const totalClasses = subjectStats.reduce((sum, s) => sum + s.total, 0);
     const totalAbsent = totalClasses - totalPresent;
     const overallPercent = totalClasses > 0 ? Math.round((totalPresent / totalClasses) * 100) : 0;
 
-    // Last attended
     const lastRecord = await Attendance.findOne({ studentId, teacherId, status: "present" })
       .sort({ date: -1 }).lean();
 
@@ -389,63 +354,10 @@ router.get("/student-profile/:studentId", auth, async (req, res) => {
       lastAttended,
       subjects: subjectStats
     });
-
   } catch (err) {
     console.error("STUDENT PROFILE ERROR:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
-router.get("/class-summary", auth, async (req, res) => {
-  try {
-    const teacherId = req.user.id;
-    const teacher = await User.findById(teacherId);
-    if (!teacher || !teacher.className) return res.json([]);
 
-    const className = teacher.className;
-    const allStudents = await User.find({ role: "student", className }).select("name email className").lean();
-    if (allStudents.length === 0) return res.json([{ className, students: [] }]);
-
-    const sessions = await Session.find({ teacherId }).lean();
-    const totalSessions = sessions.length;
-
-    // Latest session find karo
-    const latestSession = sessions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
-
-    // Latest session mein kaun present tha
-    let latestPresentIds = [];
-    if (latestSession) {
-      const latestRecords = await Attendance.find({
-        sessionId: latestSession._id,
-        status: "present"
-      }).lean();
-      latestPresentIds = latestRecords.map(r => r.studentId.toString());
-    }
-
-    const studentSummary = await Promise.all(allStudents.map(async (student) => {
-      const presentCount = await Attendance.countDocuments({
-        studentId: student._id,
-        teacherId,
-        status: "present"
-      });
-
-      const percent = totalSessions > 0 ? Math.round((presentCount / totalSessions) * 100) : 0;
-
-      return {
-        _id: student._id,
-        name: student.name,
-        email: student.email,
-        totalClasses: totalSessions,
-        present: presentCount,
-        absent: totalSessions - presentCount,
-        percent,
-        presentInLatest: latestPresentIds.includes(student._id.toString())
-      };
-    }));
-
-    res.json([{ className, students: studentSummary }]);
-  } catch (err) {
-    console.error("CLASS SUMMARY ERROR:", err);
-    res.status(500).json({ message: "Server error" });
-  }
-});
 module.exports = router;
