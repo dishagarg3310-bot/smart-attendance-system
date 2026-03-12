@@ -7,10 +7,9 @@ const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
 const resultArea = document.getElementById("resultArea");
 
-// Camera start karo
 startBtn.addEventListener("click", () => {
   scanDone = false;
-  resultArea.innerHTML = `<div class="result-info">📷 Camera start...</div>`;
+  resultArea.innerHTML = `<div class="result-info">📷 Starting camera...</div>`;
 
   html5QrCode = new Html5Qrcode("qr-reader");
 
@@ -25,9 +24,9 @@ startBtn.addEventListener("click", () => {
   ).then(() => {
     startBtn.style.display = "none";
     stopBtn.style.display = "inline-block";
-    resultArea.innerHTML = `<div class="result-info">🔍 Set Camera in front of QR Code...</div>`;
+    resultArea.innerHTML = `<div class="result-info">🔍 Place the QR Code in front of the camera...</div>`;
   }).catch(err => {
-    resultArea.innerHTML = `<div class="result-error">❌ Camera not opened: ${err}<br><small>Give Camera permission to browser!</small></div>`;
+    resultArea.innerHTML = `<div class="result-error">❌ Camera could not open: ${err}<br><small>Please allow camera permission in your browser!</small></div>`;
   });
 });
 
@@ -53,12 +52,11 @@ async function onScanSuccess(decodedText) {
   stopCamera();
 
   try {
-    // ✅ FIX: QR data parse karo — invalid JSON check
     let qrData;
     try {
       qrData = JSON.parse(decodedText);
     } catch {
-      resultArea.innerHTML = `<div class="result-error">❌ Invalid QR Code! That is not a Smart Attendance QR Code.</div>`;
+      resultArea.innerHTML = `<div class="result-error">❌ Invalid QR Code! This is not a Smart Attendance QR Code.</div>`;
       scanDone = false;
       return;
     }
@@ -66,12 +64,12 @@ async function onScanSuccess(decodedText) {
     const sessionId = qrData.sessionId;
 
     if (!sessionId) {
-      resultArea.innerHTML = `<div class="result-error">❌ No Session Id in QR!</div>`;
+      resultArea.innerHTML = `<div class="result-error">❌ No Session ID found in QR Code!</div>`;
       scanDone = false;
       return;
     }
 
-    resultArea.innerHTML = `<div class="result-info">⏳ Attendance marked!...</div>`;
+    resultArea.innerHTML = `<div class="result-info">⏳ Marking attendance...</div>`;
 
     const res = await fetchAPI("/api/attendance/mark", {
       method: "POST",
@@ -84,11 +82,10 @@ async function onScanSuccess(decodedText) {
       resultArea.innerHTML = `
         <div class="result-success">
           ✅ ${data.message}<br>
-          <small>Go To the Dashboard to Check Attendance</small>
+          <small>Go to the Dashboard to check your attendance</small>
         </div>
       `;
     } else {
-      // ✅ FIX: Exact server message dikhao
       resultArea.innerHTML = `<div class="result-error">❌ ${data.message}</div>`;
       scanDone = false;
     }
@@ -101,5 +98,5 @@ async function onScanSuccess(decodedText) {
 }
 
 function onScanError(err) {
-  // Silent — scan errors normal hote hain
+  // Silent — scan errors are normal
 }

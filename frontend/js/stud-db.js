@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // Student name dikhao
+  // Show student name
   const name = localStorage.getItem("name");
   const nameEl = document.getElementById("studentName");
   if (name && nameEl) nameEl.innerText = name;
@@ -50,8 +50,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           const needed = Math.ceil((0.75 * total - present) / (1 - 0.75));
           warningEl.style.display = "flex";
           warningEl.innerHTML = `
-            <span>⚠️ your attendance <strong>${percent}%</strong> less than 75%! 
-            For more Attendance <strong>${needed}</strong> attend classes .</span>
+            <span>⚠️ Your attendance is <strong>${percent}%</strong> which is below 75%! 
+            You need to attend <strong>${needed}</strong> more classes to meet the requirement.</span>
           `;
         } else if (total > 0 && percent < 85) {
           warningEl.style.display = "flex";
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           warningEl.style.borderColor = "#d97706";
           warningEl.style.color = "#92400e";
           warningEl.innerHTML = `
-            <span>🔔 your attendance <strong>${percent}%</strong> that is more than  — 75% !</span>
+            <span>🔔 Your attendance is <strong>${percent}%</strong> — Keep it up to stay above 75%!</span>
           `;
         } else {
           warningEl.style.display = "none";
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               <div class="notif-time">${new Date(n.createdAt).toLocaleTimeString("en-IN", {hour:"2-digit", minute:"2-digit"})}</div>
             </div>
           `).join("")
-        : `<p style="text-align:center;color:#9ca3af;padding:15px;">No notification</p>`;
+        : `<p style="text-align:center;color:#9ca3af;padding:15px;">No notifications</p>`;
     } catch (err) {
       console.error(err);
     }
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
-  // Panel bahar click pe band ho
+  // Close panel on outside click
   document.addEventListener("click", function(e) {
     const wrapper = document.querySelector(".bell-wrapper");
     if (wrapper && !wrapper.contains(e.target)) {
