@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const emailInput = document.getElementById("email");
   const passwordInput = document.getElementById("password");
@@ -41,4 +40,3 @@ form.addEventListener("submit", async e => {
     errorMsg.innerText = "Connection failed: " + err.message;
   }
 });
-```
