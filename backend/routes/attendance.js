@@ -395,4 +395,57 @@ router.get("/student-profile/:studentId", auth, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+router.get("/class-summary", auth, async (req, res) => {
+  try {
+    const teacherId = req.user.id;
+    const teacher = await User.findById(teacherId);
+    if (!teacher || !teacher.className) return res.json([]);
+
+    const className = teacher.className;
+    const allStudents = await User.find({ role: "student", className }).select("name email className").lean();
+    if (allStudents.length === 0) return res.json([{ className, students: [] }]);
+
+    const sessions = await Session.find({ teacherId }).lean();
+    const totalSessions = sessions.length;
+
+    // Latest session find karo
+    const latestSession = sessions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+    // Latest session mein kaun present tha
+    let latestPresentIds = [];
+    if (latestSession) {
+      const latestRecords = await Attendance.find({
+        sessionId: latestSession._id,
+        status: "present"
+      }).lean();
+      latestPresentIds = latestRecords.map(r => r.studentId.toString());
+    }
+
+    const studentSummary = await Promise.all(allStudents.map(async (student) => {
+      const presentCount = await Attendance.countDocuments({
+        studentId: student._id,
+        teacherId,
+        status: "present"
+      });
+
+      const percent = totalSessions > 0 ? Math.round((presentCount / totalSessions) * 100) : 0;
+
+      return {
+        _id: student._id,
+        name: student.name,
+        email: student.email,
+        totalClasses: totalSessions,
+        present: presentCount,
+        absent: totalSessions - presentCount,
+        percent,
+        presentInLatest: latestPresentIds.includes(student._id.toString())
+      };
+    }));
+
+    res.json([{ className, students: studentSummary }]);
+  } catch (err) {
+    console.error("CLASS SUMMARY ERROR:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 module.exports = router;

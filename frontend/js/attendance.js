@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   function renderClass(classData) {
     allStudents = classData.students || [];
-    presentStudents = allStudents.filter(s => s.present > 0);
-    absentStudents = allStudents.filter(s => s.present === 0);
+    presentStudents = allStudents.filter(s => s.presentInLatest);
+    absentStudents = allStudents.filter(s => !s.presentInLatest);
 
     document.getElementById("className").innerText = classData.className;
     document.getElementById("totalCount").innerText = allStudents.length;
