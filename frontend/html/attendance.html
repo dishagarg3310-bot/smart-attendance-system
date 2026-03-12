@@ -41,28 +41,28 @@
           <h3 id="totalCount">0</h3>
           <small>Click to view</small>
         </div>
-      <div class="sum-card present" id="presentCard" onclick="openModal('present')" style="cursor:pointer;">
-        <p>Present</p>
-        <h3 id="presentCount">0</h3>
-        <small>Click to view</small>
-      </div>
-      <div class="sum-card absent" id="absentCard" onclick="openModal('absent')" style="cursor:pointer;">
-        <p>Absent</p>
-        <h3 id="absentCount">0</h3>
-        <small>Click to view</small>
-      </div>
-    </div>
-
-    <!-- Modal -->
-    <div id="studentModal" class="modal" style="display:none;">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 id="modalTitle">Students</h3>
-          <button class="modal-close" onclick="closeModal()">✕</button>
+        <div class="sum-card present" id="presentCard" onclick="openModal('present')" style="cursor:pointer;">
+          <p>Present</p>
+          <h3 id="presentCount">0</h3>
+          <small>Click to view</small>
         </div>
-      <div id="modalBody"></div>
-    </div>
-  </div>
+        <div class="sum-card absent" id="absentCard" onclick="openModal('absent')" style="cursor:pointer;">
+          <p>Absent</p>
+          <h3 id="absentCount">0</h3>
+          <small>Click to view</small>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div id="studentModal" class="modal" style="display:none;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modalTitle">Students</h3>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+          </div>
+          <div id="modalBody"></div>
+        </div>
+      </div>
 
       <div id="mainContent2">
 
@@ -85,8 +85,8 @@
 
   <script src="../components/topbar.js"></script>
   <script src="../components/sidebar.js"></script>
-  <script src="../js/config.js" defer></script>
-  <script src="../js/attendance.js" defer></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/attendance.js"></script>
 
 </body>
 </html>
