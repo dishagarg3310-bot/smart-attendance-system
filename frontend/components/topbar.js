@@ -7,7 +7,7 @@ function toggleSidebar() {
 
 function logout() {
   localStorage.clear();
-  window.location.replace("../index.html");
+  window.location.replace("../html/login.html");
 }
 
 const role = localStorage.getItem('role');
