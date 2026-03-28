@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const listEl = document.getElementById("sessionList");
 
     if (sessions.length === 0) {
-      listEl.innerHTML = `<p class="empty-msg">Is month koi session nahi hua</p>`;
+      listEl.innerHTML = `<p class="empty-msg">No sessions this month</p>`;
       return;
     }
 
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Present students list
       const studentsList = s.presentStudents?.length > 0
         ? s.presentStudents.map(name => `<span class="student-chip">👤 ${name}</span>`).join("")
-        : `<span style="color:#9ca3af;font-size:13px">Koi present nahi tha</span>`;
+        : `<span style="color:#9ca3af;font-size:13px">no one present</span>`;
 
       return `
         <div class="session-card ${s.isActive ? "active-session" : ""}">
