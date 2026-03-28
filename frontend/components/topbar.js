@@ -6,8 +6,13 @@ function toggleSidebar() {
 }
 
 function logout() {
+  const role = localStorage.getItem("role");
   localStorage.clear();
-  window.location.replace("../html/login.html");
+  if (role === "student") {
+    window.location.replace("student-login.html");
+  } else {
+    window.location.replace("teacher-login.html");
+  }
 }
 
 const role = localStorage.getItem('role');
