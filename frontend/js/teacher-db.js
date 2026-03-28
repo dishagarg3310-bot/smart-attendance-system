@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (totalEl) totalEl.innerText = data.length;
 
       if (data.length === 0) {
-        historyEl.innerHTML = `<p class="empty-msg">Koi session history nahi hai abhi</p>`;
+        historyEl.innerHTML = `<p class="empty-msg">There is no Session history yet.</p>`;
         return;
       }
 
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const className = classInput?.value.trim() || "General";
 
     if (!subject || !className) {
-      alert("Subject aur Class fill karo!");
+      alert("Fill Subject and Classes!");
       return;
     }
 
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await res.json();
-      if (!res.ok) { alert(data.message || "Session start nahi hua!"); return; }
+      if (!res.ok) { alert(data.message || "Session has not started yet!"); return; }
 
       currentSessionId = data.sessionId;
       sessionActive = true;
