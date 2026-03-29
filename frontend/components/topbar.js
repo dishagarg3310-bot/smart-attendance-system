@@ -6,9 +6,9 @@ function toggleSidebar() {
 }
 
 function logout() {
-  const role = localStorage.getItem("role");
+  const role = localStorage.getItem("topbarRole");
   localStorage.clear();
-  if (role === "student") {
+  if (topbarRole === "student") {
     window.location.replace("student-login.html");
   } else {
     window.location.replace("teacher-login.html");
