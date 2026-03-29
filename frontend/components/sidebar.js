@@ -6,26 +6,33 @@ function toggleSidebar() {
 }
 
 function logout() {
+  const sidebarRole = localStorage.getItem("role");
   localStorage.clear();
-  window.location.href = 'login.html';
+  if (sidebarRole === "student") {
+    window.location.replace("student-login.html");
+  } else {
+    window.location.replace("teacher-login.html");
+  }
 }
 
-const role = localStorage.getItem('role');
+const sidebarRole = localStorage.getItem('role');
 
 const teacherLinks = `
-  <li onclick="window.location.href='teacher-db.html'">Dashboard</li>
-  <li onclick="window.location.href='attendance.html'">Attendance</li>
-  <li onclick="window.location.href='session-history.html'">Session History</li>
-  <li onclick="window.location.href='teacher-profile.html'">Profile</li>
-  <li onclick="window.location.href='change-password.html'">Change Password</li>
+  <li onclick="window.location.href='teacher-db.html'">🏠 Dashboard</li>
+  <li onclick="window.location.href='attendance.html'">📋 Attendance</li>
+  <li onclick="window.location.href='teacher-chat.html'">💬 Announcements</li>
+  <li onclick="window.location.href='session-history.html'">📅 Session</li>
+  <li onclick="window.location.href='teacher-profile.html'">👤 Profile</li>
+  <li onclick="window.location.href='change-password.html'">🔒 Change Password</li>
 `;
 
 const studentLinks = `
-  <li onclick="window.location.href='stud-db.html'">Dashboard</li>
-  <li onclick="window.location.href='student-scan.html'">Scan QR</li>
-  <li onclick="window.location.href='student-attendance.html'">My Attendance</li>
-  <li onclick="window.location.href='student-profile.html'">Profile</li>
-  <li onclick="window.location.href='change-password.html'">Change Password</li>
+  <li onclick="window.location.href='stud-db.html'">🏠 Dashboard</li>
+  <li onclick="window.location.href='student-scan.html'">📷 Scan QR</li>
+  <li onclick="window.location.href='student-attendance.html'">📊 My Attendance</li>
+  <li onclick="window.location.href='student-chat.html'">💬 Announcements</li>
+  <li onclick="window.location.href='student-profile.html'">👤 Profile</li>
+  <li onclick="window.location.href='change-password.html'">🔒 Change Password</li>
 `;
 
 fetch('../components/sidebar.html')
@@ -33,7 +40,7 @@ fetch('../components/sidebar.html')
   .then(html => {
     document.getElementById('sidebar-container').innerHTML = html;
     document.getElementById('sidebarMenu').innerHTML =
-      role === 'student' ? studentLinks : teacherLinks;
+      sidebarRole === 'student' ? studentLinks : teacherLinks;
   });
 
 fetch('../components/topbar.html')
