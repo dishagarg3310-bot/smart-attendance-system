@@ -20,8 +20,9 @@ const role = localStorage.getItem('role');
 const teacherLinks = `
   <li onclick="window.location.href='teacher-db.html'">🏠 Dashboard</li>
   <li onclick="window.location.href='attendance.html'">📋 Attendance</li>
+  <li onclick="window.location.href='teacher-chat.html'">💬 Announcements</li>
+  <li onclick="window.location.href='session-history.html'">📅 Session</li>
   <li onclick="window.location.href='teacher-profile.html'">👤 Profile</li>
-  <li onclick="window.location.href='session-history.html'">👤 Session</li>
   <li onclick="window.location.href='change-password.html'">🔒 Change Password</li>
 `;
 
@@ -29,6 +30,7 @@ const studentLinks = `
   <li onclick="window.location.href='stud-db.html'">🏠 Dashboard</li>
   <li onclick="window.location.href='student-scan.html'">📷 Scan QR</li>
   <li onclick="window.location.href='student-attendance.html'">📊 My Attendance</li>
+  <li onclick="window.location.href='student-chat.html'">💬 Announcements</li>
   <li onclick="window.location.href='student-profile.html'">👤 Profile</li>
   <li onclick="window.location.href='change-password.html'">🔒 Change Password</li>
 `;
