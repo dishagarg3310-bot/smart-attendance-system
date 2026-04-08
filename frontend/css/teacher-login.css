@@ -134,3 +134,47 @@ select {
   outline: none;
   color: #333;
 }
+.back-btn {
+  display: inline-block;
+  margin-bottom: 16px;
+  color: #00796b;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.back-btn:hover { text-decoration: underline; }
+
+.password-wrapper {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.password-wrapper input {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.show-pass {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #555;
+  text-align: left;
+}
+
+.remember-me input {
+  width: auto;
+  margin: 0;
+}

@@ -10,6 +10,9 @@
 <body>
 
   <div class="login-container">
+
+    <a href="../index.html" class="back-btn">← Back</a>
+
     <h2>Teacher Login</h2>
 
     <div class="demo-box">
@@ -21,19 +24,23 @@
 
     <form id="teacherLoginForm">
       <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
+
+      <div class="password-wrapper">
+        <input type="password" id="password" placeholder="Password" required />
+        <span class="show-pass" onclick="togglePassword()">👁️</span>
+      </div>
+
+      <div class="remember-me">
+        <input type="checkbox" id="rememberMe" />
+        <label for="rememberMe">Remember Me</label>
+      </div>
+
       <button type="submit">Login</button>
     </form>
 
     <p id="errorMsg"></p>
   </div>
 
-  <script>
-    function fillDemo() {
-      document.getElementById('email').value = 'priya@gmail.com';
-      document.getElementById('password').value = 'priya123';
-    }
-  </script>
   <script src="../js/config.js" defer></script>
   <script src="../js/teacher-login.js" defer></script>
 </body>

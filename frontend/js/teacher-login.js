@@ -1,11 +1,30 @@
-// ✅ FIX: Poora code DOMContentLoaded mein wrap kiya
 document.addEventListener("DOMContentLoaded", () => {
 
-  document.getElementById("teacherLoginForm").addEventListener("submit", async function (e) {
+  // Remember me prefill
+  const remembered = localStorage.getItem("rememberedTeacherEmail");
+  if (remembered) {
+    document.getElementById("email").value = remembered;
+    document.getElementById("rememberMe").checked = true;
+  }
+
+  // Fill demo
+  window.fillDemo = function() {
+    document.getElementById('email').value = 'priya@gmail.com';
+    document.getElementById('password').value = 'priya123';
+  };
+
+  // Show/hide password
+  window.togglePassword = function() {
+    const pwd = document.getElementById("password");
+    pwd.type = pwd.type === "password" ? "text" : "password";
+  };
+
+  document.getElementById("teacherLoginForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
+    const rememberMe = document.getElementById("rememberMe").checked;
     const errorMsg = document.getElementById("errorMsg");
     const btn = this.querySelector("button[type=submit]");
 
@@ -14,8 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.innerText = "Logging in...";
 
     try {
-      // ✅ FIX: localhost hataya — fetchAPI (config.js) use karo
-      // Ab ngrok, localhost, koi bhi URL pe kaam karega
       const res = await fetchAPI("/api/auth/login", {
         method: "POST",
         body: JSON.stringify({ email, password })
@@ -30,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Role check
       if (data.role !== "teacher") {
         errorMsg.innerText = "You are not authorized as Teacher";
         btn.disabled = false;
@@ -38,11 +54,15 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Save to localStorage
+      if (rememberMe) {
+        localStorage.setItem("rememberedTeacherEmail", email);
+      } else {
+        localStorage.removeItem("rememberedTeacherEmail");
+      }
+
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("name", data.name);
-
       window.location.href = "teacher-db.html";
 
     } catch (err) {
@@ -52,5 +72,4 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.innerText = "Login";
     }
   });
-
 });
