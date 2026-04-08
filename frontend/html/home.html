@@ -4,22 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Attendance System</title>
-
-  <script>
-    (function() {
-      const token = localStorage.getItem("token");
-      const role = localStorage.getItem("role");
-      if (token && role === "teacher") {
-        window.location.replace("html/teacher-db.html");
-      } else if (token && role === "student") {
-        window.location.replace("html/stud-db.html");
-      } else if (token && role === "admin") {
-        window.location.replace("html/admin-dashboard.html");
-      }
-    })();
-  </script>
-
-  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="../css/home.css">
 </head>
 <body>
 
@@ -31,19 +16,19 @@
     </div>
 
     <div class="role-cards">
-      <div class="role-card" onclick="window.location.href='html/admin-login.html'">
+      <div class="role-card" onclick="window.location.href='admin-login.html'">
         <div class="role-icon">🛡️</div>
         <h3>Admin</h3>
         <p>Manage teachers, students & classes</p>
       </div>
 
-      <div class="role-card" onclick="window.location.href='html/teacher-login.html'">
+      <div class="role-card" onclick="window.location.href='teacher-login.html'">
         <div class="role-icon">👨‍🏫</div>
         <h3>Teacher</h3>
         <p>Start sessions & track attendance</p>
       </div>
 
-      <div class="role-card" onclick="window.location.href='html/student-login.html'">
+      <div class="role-card" onclick="window.location.href='student-login.html'">
         <div class="role-icon">👨‍🎓</div>
         <h3>Student</h3>
         <p>Mark attendance & view records</p>

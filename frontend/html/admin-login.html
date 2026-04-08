@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="../css/admin-login.css">
+</head>
+<body>
+
+  <div class="login-container">
+
+    <a href="home.html" class="back-btn">← Back</a>
+
+    <div class="login-header">
+      <div class="login-icon">🛡️</div>
+      <h2>Admin Login</h2>
+      <p>Access admin dashboard</p>
+    </div>
+
+    <form id="adminLoginForm">
+      <input type="email" id="email" placeholder="Admin Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+
+    <p id="errorMsg"></p>
+
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/admin-login.js"></script>
+</body>
+</html>

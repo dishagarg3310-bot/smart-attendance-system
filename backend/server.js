@@ -11,6 +11,7 @@ const sessionRoutes = require("./routes/session");
 const attendanceRoutes = require("./routes/attendance");
 const notificationRoutes = require("./routes/notification");
 const chatRoutes = require("./routes/chat");
+const adminRoutes = require("./routes/admin");
 
 const app = express();
 const server = http.createServer(app);
@@ -27,7 +28,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Socket.io ko routes mein use karne ke liye
 app.set("io", io);
 
 // Frontend static files
@@ -44,34 +44,30 @@ app.use("/api/session", sessionRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/notification", notificationRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Socket.io events
 io.on("connection", (socket) => {
   console.log("🔌 User connected:", socket.id);
 
-  // Room join karo (className ke basis pe)
   socket.on("joinRoom", (className) => {
     socket.join(className);
     console.log(`User joined room: ${className}`);
   });
 
-  // Teacher room join
   socket.on("joinTeacher", () => {
     socket.join("teachers");
     console.log("Teacher joined");
   });
 
-  // Hand raise
   socket.on("handRaise", (data) => {
     io.to("teachers").emit("handRaised", data);
   });
 
-  // Hand down
   socket.on("handDown", (data) => {
     io.to("teachers").emit("handLowered", data);
   });
 
-  // Chat message
   socket.on("sendMessage", (data) => {
     io.to(data.room).emit("newMessage", data);
   });

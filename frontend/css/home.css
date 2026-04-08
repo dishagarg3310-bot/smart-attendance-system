@@ -1,0 +1,80 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f766e, #14b8a6, #0d9488);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.home-container {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.home-header {
+  color: white;
+  margin-bottom: 50px;
+}
+
+.logo {
+  font-size: 60px;
+  margin-bottom: 16px;
+}
+
+.home-header h1 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.home-header p {
+  font-size: 16px;
+  opacity: 0.85;
+}
+
+.role-cards {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.role-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px 32px;
+  width: 220px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+.role-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+}
+
+.role-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.role-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f766e;
+  margin-bottom: 8px;
+}
+
+.role-card p {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.5;
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+
+  <script>
+    (function() {
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+      if (!token || role !== "admin") {
+        window.location.replace("admin-login.html");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/admin-dashboard.css">
+</head>
+<body>
+
+  <div class="admin-container">
+
+    <!-- Sidebar -->
+    <div class="admin-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">📋</div>
+        <h2>Smart Attendance</h2>
+        <p>Admin Panel</p>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="active" onclick="showTab('classes')">🏫 Classes & Subjects</li>
+        <li onclick="showTab('teachers')">👨‍🏫 Teachers</li>
+        <li onclick="showTab('students')">👨‍🎓 Students</li>
+      </ul>
+
+      <button class="logout-btn" onclick="adminLogout()">🚪 Logout</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="admin-main">
+
+      <!-- Header -->
+      <div class="admin-header">
+        <h1 id="pageTitle">Classes & Subjects</h1>
+        <span class="admin-name">👤 Admin</span>
+      </div>
+
+      <!-- Classes Tab -->
+      <div class="tab-content active" id="tab-classes">
+
+        <div class="action-bar">
+          <button class="add-btn" onclick="showAddClassModal()">+ Add Class</button>
+        </div>
+
+        <div id="classesList" class="cards-grid"></div>
+
+      </div>
+
+      <!-- Teachers Tab -->
+      <div class="tab-content" id="tab-teachers">
+
+        <div class="action-bar">
+          <button class="add-btn" onclick="showAddTeacherModal()">+ Add Teacher</button>
+        </div>
+
+        <div id="teachersList" class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Class</th>
+                <th>Subject</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="teachersBody"></tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- Students Tab -->
+      <div class="tab-content" id="tab-students">
+        <div id="studentsList" class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Class</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="studentsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Add Class Modal -->
+  <div class="modal-overlay" id="addClassModal">
+    <div class="modal">
+      <h3>Add New Class</h3>
+      <input type="text" id="newClassName" placeholder="Class Name (e.g. BCA 3rd Year)" />
+      <input type="text" id="newSubjects" placeholder="Subjects (comma separated)" />
+      <div class="modal-btns">
+        <button class="cancel-btn" onclick="closeModal('addClassModal')">Cancel</button>
+        <button class="save-btn" onclick="addClass()">Add Class</button>
+      </div>
+      <p id="classMsg"></p>
+    </div>
+  </div>
+
+  <!-- Add Teacher Modal -->
+  <div class="modal-overlay" id="addTeacherModal">
+    <div class="modal">
+      <h3>Register Teacher</h3>
+      <input type="text" id="teacherName" placeholder="Full Name" />
+      <input type="email" id="teacherEmail" placeholder="Email" />
+      <input type="password" id="teacherPassword" placeholder="Password" />
+      <select id="teacherClass">
+        <option value="">Select Class</option>
+      </select>
+      <select id="teacherSubject">
+        <option value="">Select Subject</option>
+      </select>
+      <div class="modal-btns">
+        <button class="cancel-btn" onclick="closeModal('addTeacherModal')">Cancel</button>
+        <button class="save-btn" onclick="addTeacher()">Register</button>
+      </div>
+      <p id="teacherMsg"></p>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/admin-dashboard.js"></script>
+
+</body>
+</html>
