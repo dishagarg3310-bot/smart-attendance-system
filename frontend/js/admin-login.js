@@ -64,8 +64,13 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.innerText = "Login";
     }
   });
-  window.toggleHint = function() {
+  // DOMContentLoaded ke bahar
+window.toggleHint = function() {
   const hint = document.getElementById("hintContent");
   hint.style.display = hint.style.display === "none" ? "block" : "none";
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+  // baki sab code...
+});
 });
