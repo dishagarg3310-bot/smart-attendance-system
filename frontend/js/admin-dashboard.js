@@ -74,7 +74,7 @@ function renderClasses() {
           : `<span class="empty-subject">No subjects added</span>`
         }
       </div>
-      <button class="edit-subjects-btn" onclick="editSubjects('${c._id}', '${c.className}', ${JSON.stringify(c.subjects)})">
+      <button class="edit-subjects-btn" onclick="editSubjects('${c._id}', '${c.className}', ${JSON.stringify(c.subjects).replace(/'/g, "&#39;")})">
         ✏️ Edit Subjects
       </button>
     </div>
@@ -116,14 +116,70 @@ async function deleteClass(id) {
   loadClasses();
 }
 
+// ========== EDIT SUBJECTS MODAL ==========
 function editSubjects(id, className, subjects) {
-  const newSubjects = prompt(`Edit subjects for ${className} (comma separated):`, subjects.join(", "));
-  if (newSubjects === null) return;
-  const subjectArr = newSubjects.split(",").map(s => s.trim()).filter(s => s);
-  fetchAPI(`/api/admin/classes/${id}`, {
-    method: "PUT",
-    body: JSON.stringify({ className, subjects: subjectArr })
-  }).then(() => loadClasses());
+  // Purana modal remove karo agar hai
+  const existing = document.getElementById("editSubjectModal");
+  if (existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.className = "modal-overlay";
+  overlay.style.display = "flex";
+  overlay.id = "editSubjectModal";
+
+  overlay.innerHTML = `
+    <div class="modal">
+      <h3>✏️ Edit Subjects</h3>
+      <p style="font-size:13px;color:#6b7280;margin-top:-8px;margin-bottom:4px;">Class: <strong>${className}</strong></p>
+      <input 
+        type="text" 
+        id="editSubjectsInput" 
+        value="${subjects.join(", ")}" 
+        placeholder="DBMS, OS, Maths, Data Structures..." 
+      />
+      <p style="font-size:12px;color:#9ca3af;">Separate subjects with commas</p>
+      <div class="modal-btns">
+        <button class="cancel-btn" onclick="document.getElementById('editSubjectModal').remove()">Cancel</button>
+        <button class="save-btn" onclick="saveSubjects('${id}', '${className}')">Save</button>
+      </div>
+      <p id="editSubjectMsg" style="color:red;text-align:center;font-size:13px;min-height:18px;"></p>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Bahar click pe band ho
+  overlay.addEventListener("click", function(e) {
+    if (e.target === overlay) overlay.remove();
+  });
+}
+
+async function saveSubjects(id, className) {
+  const val = document.getElementById("editSubjectsInput").value.trim();
+  const msg = document.getElementById("editSubjectMsg");
+
+  if (!val) {
+    msg.innerText = "Subjects cannot be empty!";
+    return;
+  }
+
+  const subjects = val.split(",").map(s => s.trim()).filter(s => s);
+
+  try {
+    const res = await fetchAPI(`/api/admin/classes/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({ className, subjects })
+    });
+
+    if (res.ok) {
+      document.getElementById("editSubjectModal").remove();
+      loadClasses();
+    } else {
+      msg.innerText = "Error saving subjects!";
+    }
+  } catch (err) {
+    msg.innerText = "Connection failed!";
+  }
 }
 
 // ========== TEACHERS ==========
