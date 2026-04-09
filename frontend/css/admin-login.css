@@ -67,6 +67,7 @@ form {
 }
 
 input {
+  width: 100%;
   padding: 12px 16px;
   border: 2px solid #e5e7eb;
   border-radius: 10px;
@@ -89,6 +90,7 @@ button {
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s;
+  width: 100%;
 }
 
 button:hover {
@@ -101,4 +103,36 @@ button:hover {
   font-size: 14px;
   margin-top: 12px;
   min-height: 20px;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  padding-right: 44px;
+}
+
+.show-pass {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #555;
+}
+
+.remember-me input {
+  width: auto;
+  accent-color: #0f766e;
 }
