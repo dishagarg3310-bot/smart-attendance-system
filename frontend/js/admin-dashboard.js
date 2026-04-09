@@ -74,13 +74,17 @@ function renderClasses() {
           : `<span class="empty-subject">No subjects added</span>`
         }
       </div>
-      <button class="edit-subjects-btn" onclick="editSubjects('${c._id}', '${c.className}', ${JSON.stringify(c.subjects).replace(/'/g, "&#39;")})">
+      <button 
+        class="edit-subjects-btn" 
+        data-id="${c._id}"
+        data-classname="${c.className}"
+        data-subjects="${encodeURIComponent(JSON.stringify(c.subjects))}"
+        onclick="editSubjects(this)">
         ✏️ Edit Subjects
       </button>
     </div>
   `).join("");
 }
-
 async function addClass() {
   const className = document.getElementById("newClassName").value.trim();
   const subjectsRaw = document.getElementById("newSubjects").value.trim();
@@ -117,8 +121,11 @@ async function deleteClass(id) {
 }
 
 // ========== EDIT SUBJECTS MODAL ==========
-function editSubjects(id, className, subjects) {
-  // Purana modal remove karo agar hai
+function editSubjects(btn) {
+  const id = btn.getAttribute("data-id");
+  const className = btn.getAttribute("data-classname");
+  const subjects = JSON.parse(decodeURIComponent(btn.getAttribute("data-subjects")));
+
   const existing = document.getElementById("editSubjectModal");
   if (existing) existing.remove();
 
@@ -135,7 +142,7 @@ function editSubjects(id, className, subjects) {
         type="text" 
         id="editSubjectsInput" 
         value="${subjects.join(", ")}" 
-        placeholder="DBMS, OS, Maths, Data Structures..." 
+        placeholder="DBMS, OS, Maths..." 
       />
       <p style="font-size:12px;color:#9ca3af;">Separate subjects with commas</p>
       <div class="modal-btns">
@@ -148,7 +155,6 @@ function editSubjects(id, className, subjects) {
 
   document.body.appendChild(overlay);
 
-  // Bahar click pe band ho
   overlay.addEventListener("click", function(e) {
     if (e.target === overlay) overlay.remove();
   });
