@@ -22,10 +22,14 @@ const adminAuth = (req, res, next) => {
 // ✅ Admin Login
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (email !== process.env.ADMIN_EMAIL || password !== process.env.ADMIN_PASSWORD) {
+    const email = req.body.email?.toLowerCase().trim();
+    const password = req.body.password?.trim();
+
+    if (email !== process.env.ADMIN_EMAIL.toLowerCase().trim() ||
+        password !== process.env.ADMIN_PASSWORD.trim()) {
       return res.status(400).json({ message: "Invalid admin credentials" });
     }
+
     const token = jwt.sign({ id: "admin", role: "admin" }, process.env.JWT_SECRET, { expiresIn: "1d" });
     res.json({ token, role: "admin", name: "Admin" });
   } catch (err) {
@@ -78,18 +82,14 @@ router.delete("/classes/:id", adminAuth, async (req, res) => {
 });
 
 // ✅ Register teacher
-router.post("/login", async (req, res) => {
+router.post("/register-teacher", adminAuth, async (req, res) => {
   try {
-    const email = req.body.email?.toLowerCase().trim();
-    const password = req.body.password?.trim();
-    
-    if (email !== process.env.ADMIN_EMAIL.toLowerCase().trim() || 
-        password !== process.env.ADMIN_PASSWORD.trim()) {
-      return res.status(400).json({ message: "Invalid admin credentials" });
-    }
-    
-    const token = jwt.sign({ id: "admin", role: "admin" }, process.env.JWT_SECRET, { expiresIn: "1d" });
-    res.json({ token, role: "admin", name: "Admin" });
+    const { name, email, password, subject, className } = req.body;
+    const exists = await User.findOne({ email });
+    if (exists) return res.status(400).json({ message: "Teacher already exists" });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.create({ name, email, password: hashedPassword, role: "teacher", subject, className });
+    res.status(201).json({ message: "Teacher registered successfully" });
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
