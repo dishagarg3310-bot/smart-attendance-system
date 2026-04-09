@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Teacher Login</title>
   <link rel="stylesheet" href="../css/teacher-login.css">
-  <link rel="stylesheet" href="../css/teacher-login-demo.css">
 </head>
 <body>
 
@@ -13,7 +12,11 @@
 
     <a href="../index.html" class="back-btn">← Back</a>
 
-    <h2>Teacher Login</h2>
+    <div class="login-header">
+      <div class="login-icon">👨‍🏫</div>
+      <h2>Teacher Login</h2>
+      <p>Access your dashboard</p>
+    </div>
 
     <form id="teacherLoginForm">
       <input type="email" id="email" placeholder="Email" required />
@@ -34,7 +37,7 @@
     <p id="errorMsg"></p>
   </div>
 
-  <script src="../js/config.js" defer></script>
-  <script src="../js/teacher-login.js" defer></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/teacher-login.js"></script>
 </body>
 </html>

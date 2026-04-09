@@ -53,3 +53,25 @@ select {
 select:focus {
   border-color: #14b8a6;
 }
+.login-header {
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.login-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.login-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f9b8e;
+  margin-bottom: 4px;
+}
+
+.login-header p {
+  font-size: 13px;
+  color: #6b7280;
+}
