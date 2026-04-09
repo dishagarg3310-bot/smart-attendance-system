@@ -2,6 +2,7 @@
 .main {
   display: flex;
   margin-top: 60px;
+  min-height: calc(100vh - 60px);
 }
 
 /* ================= SIDEBAR ================= */
@@ -9,10 +10,14 @@
   width: 220px;
   min-width: 220px;
   min-height: calc(100vh - 60px);
+  height: 100%;
   background: linear-gradient(to bottom, #0f766e, #14b8a6);
   padding-top: 20px;
   transition: 0.3s;
   flex-shrink: 0;
+  position: sticky;
+  top: 60px;
+  align-self: flex-start;
 }
 
 .sidebar.hide {
@@ -50,12 +55,12 @@
   flex: 1;
   padding: 30px;
   transition: 0.3s;
-  min-height: calc(100vh - 60px);
 }
 
 .content.full {
   margin-left: 0;
 }
+
 .menu-btn {
   cursor: pointer;
 }
