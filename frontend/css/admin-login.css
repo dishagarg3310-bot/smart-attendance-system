@@ -136,3 +136,31 @@ button:hover {
   width: auto;
   accent-color: #0f766e;
 }
+.hint-box {
+  background: #f0fdfa;
+  border: 1px dashed #14b8a6;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.hint-toggle {
+  color: #0f766e;
+  cursor: pointer;
+  font-weight: 600;
+  user-select: none;
+}
+
+.hint-toggle:hover {
+  text-decoration: underline;
+}
+
+.hint-content {
+  margin-top: 8px;
+  color: #374151;
+  line-height: 1.8;
+}
+
+.hint-content strong {
+  color: #0f766e;
+}

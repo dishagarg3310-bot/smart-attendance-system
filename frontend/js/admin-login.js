@@ -64,4 +64,8 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.innerText = "Login";
     }
   });
+  window.toggleHint = function() {
+  const hint = document.getElementById("hintContent");
+  hint.style.display = hint.style.display === "none" ? "block" : "none";
+};
 });
