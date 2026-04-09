@@ -1,10 +1,10 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
 
   if (!token || role !== "teacher") {
-    window.location.replace("login.html");
+    window.location.replace("teacher-login.html");
     return;
   }
 
@@ -24,7 +24,47 @@ document.addEventListener("DOMContentLoaded", () => {
   let countInterval = null;
   let currentSessionId = null;
 
-  // ✅ Session history load karo
+  // ========== LOAD CLASSES & SUBJECTS ==========
+  async function loadClassesDropdown() {
+    try {
+      const res = await fetchAPI("/api/admin/public/classes");
+      const classes = await res.json();
+
+      classInput.innerHTML = `<option value="">Select Class</option>`;
+      classes.forEach(c => {
+        classInput.innerHTML += `<option value="${c.className}">${c.className}</option>`;
+      });
+
+      // Class change hone pe subjects filter karo
+      classInput.addEventListener("change", function() {
+        const selected = classes.find(c => c.className === this.value);
+        subjectInput.innerHTML = `<option value="">Select Subject</option>`;
+        if (selected) {
+          selected.subjects.forEach(s => {
+            subjectInput.innerHTML += `<option value="${s}">${s}</option>`;
+          });
+        }
+      });
+
+      // Restore session ke waqt saved class/subject set karo
+      const savedClass = localStorage.getItem("sessionClass");
+      const savedSubject = localStorage.getItem("sessionSubject");
+      if (savedClass) {
+        classInput.value = savedClass;
+        classInput.dispatchEvent(new Event("change"));
+        setTimeout(() => {
+          if (savedSubject) subjectInput.value = savedSubject;
+        }, 100);
+      }
+
+    } catch (err) {
+      console.error("Classes load error:", err);
+    }
+  }
+
+  await loadClassesDropdown();
+
+  // ========== SESSION HISTORY ==========
   async function loadSessionHistory() {
     try {
       const res = await fetchAPI("/api/attendance/session-history");
@@ -36,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (totalEl) totalEl.innerText = data.length;
 
       if (data.length === 0) {
-        historyEl.innerHTML = `<p class="empty-msg">There is no Session history yet.</p>`;
+        historyEl.innerHTML = `<p class="empty-msg">No session history available</p>`;
         return;
       }
 
@@ -68,12 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ✅ Restore session on page refresh
+  // ========== RESTORE SESSION ==========
   function restoreSession() {
     const savedSessionId = localStorage.getItem("activeSessionId");
     const savedSeconds = parseInt(localStorage.getItem("sessionSeconds"));
-    const savedSubject = localStorage.getItem("sessionSubject");
-    const savedClass = localStorage.getItem("sessionClass");
 
     if (savedSessionId && savedSeconds && savedSeconds > 0) {
       currentSessionId = savedSessionId;
@@ -84,9 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
       sessionStatus.style.color = "#16a34a";
       startBtn.innerText = "Stop Session";
       startBtn.style.background = "linear-gradient(90deg,#dc2626,#ef4444)";
-
-      if (subjectInput && savedSubject) subjectInput.value = savedSubject;
-      if (classInput && savedClass) classInput.value = savedClass;
 
       refreshQR();
       startTimer();
@@ -102,12 +137,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ========== START SESSION ==========
   async function startSession() {
-    const subject = subjectInput?.value.trim() || "General";
-    const className = classInput?.value.trim() || "General";
+    const subject = subjectInput?.value;
+    const className = classInput?.value;
 
     if (!subject || !className) {
-      alert("Fill Subject and Classes!");
+      alert("Please select Class and Subject!");
       return;
     }
 
@@ -118,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await res.json();
-      if (!res.ok) { alert(data.message || "Session has not started yet!"); return; }
+      if (!res.ok) { alert(data.message || "Session could not be started!"); return; }
 
       currentSessionId = data.sessionId;
       sessionActive = true;
@@ -146,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ========== FETCH PRESENT COUNT ==========
   async function fetchPresentCount() {
     if (!currentSessionId) return;
     try {
@@ -157,6 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ========== STOP SESSION ==========
   async function stopSession() {
     if (currentSessionId) {
       await fetchAPI(`/api/session/stop/${currentSessionId}`, { method: "POST" });
@@ -185,10 +223,10 @@ document.addEventListener("DOMContentLoaded", () => {
     startBtn.innerText = "Start Session";
     startBtn.style.background = "linear-gradient(90deg,#0f766e,#14b8a6)";
 
-    // ✅ History reload karo
     loadSessionHistory();
   }
 
+  // ========== REFRESH QR ==========
   async function refreshQR() {
     if (!currentSessionId) return;
     try {
@@ -200,6 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ========== SHOW QR ==========
   function showQR(qrDataUrl) {
     qrCode.innerHTML = `<img src="${qrDataUrl}" style="width:200px;height:200px;border-radius:12px;">`;
     let seconds = 60;
@@ -211,6 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1000);
   }
 
+  // ========== TIMER ==========
   function startTimer() {
     updateTimer();
     timerInterval = setInterval(() => {

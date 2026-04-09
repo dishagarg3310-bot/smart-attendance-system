@@ -58,8 +58,12 @@
         <div class="session-panel">
           <h3>Attendance Session</h3>
           <div class="session-info">
-            <input type="text" id="subjectInput" placeholder="Subject (e.g. DBMS)" class="session-input">
-            <input type="text" id="classInput" placeholder="Class (e.g. BCA 3rd Year)" class="session-input">
+            <select id="classInput" class="session-input">
+              <option value="">Select Class</option>
+            </select>
+            <select id="subjectInput" class="session-input">
+              <option value="">Select Subject</option>
+            </select>
           </div>
           <button class="start-btn" id="startSession">Start Session</button>
         </div>

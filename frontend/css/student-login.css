@@ -1,0 +1,55 @@
+input, select, button {
+  font-size: 16px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  background: #f5f5f5;
+  font-weight: 600;
+  font-size: 14px;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.tab.active {
+  background: #0f9b8e;
+  color: white;
+}
+
+.form-section {
+  display: none;
+}
+
+.form-section.active {
+  display: block;
+}
+
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  outline: none;
+  color: #333;
+  background: white;
+}
+
+select:focus {
+  border-color: #14b8a6;
+}
