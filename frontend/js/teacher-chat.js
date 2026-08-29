@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const socket = io(API, { auth: { token } });
 
-  // Teacher room join
   socket.emit("joinTeacher");
 
   // Load announcements
@@ -13,7 +12,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       const res = await fetchAPI("/api/chat/announcements");
       const data = await res.json();
-      renderAnnouncements(data);
+      if (Array.isArray(data)) {
+        renderAnnouncements(data);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -24,18 +25,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     const message = document.getElementById("announcementText").value.trim();
     if (!message) return;
 
+    const btn = document.getElementById("sendAnnouncement");
+    btn.disabled = true;
+    btn.innerText = "Sending...";
+
     try {
       const res = await fetchAPI("/api/chat/announcement", {
         method: "POST",
         body: JSON.stringify({ message })
       });
-      const data = await res.json();
       if (res.ok) {
         document.getElementById("announcementText").value = "";
         loadAnnouncements();
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "📢 Send Announcement";
     }
   });
 
@@ -62,9 +69,11 @@ document.addEventListener("DOMContentLoaded", async () => {
           <p class="announcement-message">${a.message}</p>
 
           <div class="hand-section">
-            <span class="hand-count">✋ Queries: ${a.handRaises?.length || 0}</span>
+            <span class="hand-count" id="handcount-${a._id}">✋ Queries: ${a.handRaises?.length || 0}</span>
             <button class="chat-toggle-btn ${a.chatEnabled ? "enabled" : "disabled"}"
-              onclick="toggleChat('${a._id}', ${a.chatEnabled})">
+              id="toggleBtn-${a._id}"
+              data-id="${a._id}"
+              data-enabled="${a.chatEnabled}">
               ${a.chatEnabled ? "🔴 Disable Chat" : "🟢 Enable Chat"}
             </button>
           </div>
@@ -73,21 +82,52 @@ document.addEventListener("DOMContentLoaded", async () => {
             ${handList}
           </div>
 
-          <!-- Chat Box -->
           <div class="chat-box" id="chatbox-${a._id}">
             <div class="chat-messages" id="messages-${a._id}"></div>
             <div class="chat-input-box">
               <input type="text" id="input-${a._id}" placeholder="Type reply..." />
-              <button onclick="sendMessage('${a._id}')">Send</button>
+              <button class="send-msg-btn" data-id="${a._id}">Send</button>
             </div>
           </div>
-
         </div>
       `;
     }).join("");
 
-    // Load messages for each announcement
-    announcements.forEach(a => loadMessages(a._id));
+    // Event listeners for buttons
+    announcements.forEach(a => {
+      // Toggle chat button
+      const toggleBtn = document.getElementById(`toggleBtn-${a._id}`);
+      if (toggleBtn) {
+        toggleBtn.addEventListener("click", async () => {
+          const currentState = toggleBtn.dataset.enabled === "true";
+          try {
+            const res = await fetchAPI(`/api/chat/announcement/${a._id}/chat`, {
+              method: "PUT",
+              body: JSON.stringify({ enabled: !currentState })
+            });
+            if (res.ok) loadAnnouncements();
+          } catch (err) {
+            console.error(err);
+          }
+        });
+      }
+
+      // Send message button
+      const sendBtn = document.querySelector(`#chatbox-${a._id} .send-msg-btn`);
+      if (sendBtn) {
+        sendBtn.addEventListener("click", () => sendMessage(a._id));
+      }
+
+      // Enter key for input
+      const input = document.getElementById(`input-${a._id}`);
+      if (input) {
+        input.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") sendMessage(a._id);
+        });
+      }
+
+      loadMessages(a._id);
+    });
   }
 
   // Load messages
@@ -95,7 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       const res = await fetchAPI(`/api/chat/messages/${announcementId}`);
       const messages = await res.json();
-      renderMessages(announcementId, messages);
+      if (Array.isArray(messages)) renderMessages(announcementId, messages);
     } catch (err) {
       console.error(err);
     }
@@ -114,21 +154,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     container.scrollTop = container.scrollHeight;
   }
 
-  // Toggle chat
-  window.toggleChat = async (announcementId, currentState) => {
-    try {
-      const res = await fetchAPI(`/api/chat/announcement/${announcementId}/chat`, {
-        method: "PUT",
-        body: JSON.stringify({ enabled: !currentState })
-      });
-      if (res.ok) loadAnnouncements();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   // Send message
-  window.sendMessage = async (announcementId) => {
+  async function sendMessage(announcementId) {
     const input = document.getElementById(`input-${announcementId}`);
     const message = input.value.trim();
     if (!message) return;
@@ -145,15 +172,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (err) {
       console.error(err);
     }
-  };
+  }
 
   // Socket events
   socket.on("handRaiseUpdate", (data) => {
     const handsEl = document.getElementById(`hands-${data.announcementId}`);
+    const countEl = document.getElementById(`handcount-${data.announcementId}`);
     if (handsEl) {
       handsEl.innerHTML = data.handRaises.length > 0
         ? data.handRaises.map(h => `<span>✋ ${h.studentName}</span>`).join("")
         : "No queries yet";
+    }
+    if (countEl) {
+      countEl.innerText = `✋ Queries: ${data.handRaises.length}`;
     }
   });
 
