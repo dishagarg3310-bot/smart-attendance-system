@@ -1,1 +1,0 @@
-// sidebar handled by topbar.js
