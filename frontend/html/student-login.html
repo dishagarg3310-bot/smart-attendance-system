@@ -11,7 +11,7 @@
 
   <div class="login-container">
 
-    <a href="home.html" class="back-btn">← Back</a>
+    <a href="../index.html" class="back-btn">← Back</a>
 
     <div class="login-header">
       <div class="login-icon">👨‍🎓</div>
@@ -20,8 +20,8 @@
     </div>
 
     <div class="tabs">
-      <div class="tab active" onclick="switchTab('login')">Login</div>
-      <div class="tab" onclick="switchTab('signup')">Sign Up</div>
+      <div class="tab active" id="loginTab">Login</div>
+      <div class="tab" id="signupTab">Sign Up</div>
     </div>
 
     <!-- Login Form -->
@@ -31,7 +31,7 @@
 
         <div class="password-wrapper">
           <input type="password" id="password" placeholder="Password" required />
-          <span class="show-pass" onclick="toggleLoginPassword()">👁️</span>
+          <span class="show-pass" id="toggleLoginPass">👁️</span>
         </div>
 
         <div class="remember-me">
@@ -52,11 +52,20 @@
 
         <div class="password-wrapper">
           <input type="password" id="signupPassword" placeholder="Password" required />
-          <span class="show-pass" onclick="toggleSignupPassword()">👁️</span>
+          <span class="show-pass" id="toggleSignupPass">👁️</span>
         </div>
 
         <select id="signupClass">
           <option value="">Select Class</option>
+          <option value="BCA 1st Year">BCA 1st Year</option>
+          <option value="BCA 2nd Year">BCA 2nd Year</option>
+          <option value="BCA 3rd Year">BCA 3rd Year</option>
+          <option value="MCA 1st Year">MCA 1st Year</option>
+          <option value="MCA 2nd Year">MCA 2nd Year</option>
+          <option value="BTECH 1st Year">BTECH 1st Year</option>
+          <option value="BTECH 2nd Year">BTECH 2nd Year</option>
+          <option value="BTECH 3rd Year">BTECH 3rd Year</option>
+          <option value="BTECH 4th Year">BTECH 4th Year</option>
         </select>
 
         <button type="submit">Sign Up</button>

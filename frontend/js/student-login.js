@@ -19,17 +19,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadClasses();
 
   // ========== TAB SWITCH ==========
-  window.switchTab = function(tab) {
+  function switchTab(tab) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
     if (tab === 'login') {
-      document.querySelectorAll('.tab')[0].classList.add('active');
+      document.getElementById('loginTab').classList.add('active');
       document.getElementById('loginSection').classList.add('active');
     } else {
-      document.querySelectorAll('.tab')[1].classList.add('active');
+      document.getElementById('signupTab').classList.add('active');
       document.getElementById('signupSection').classList.add('active');
     }
   }
+
+  // Tab click events
+  document.getElementById('loginTab').addEventListener('click', () => switchTab('login'));
+  document.getElementById('signupTab').addEventListener('click', () => switchTab('signup'));
+
+  // ========== SHOW/HIDE PASSWORD ==========
+  document.getElementById("toggleLoginPass").addEventListener("click", function() {
+    const input = document.getElementById("password");
+    input.type = input.type === "password" ? "text" : "password";
+    this.innerText = input.type === "password" ? "👁️" : "🙈";
+  });
+
+  document.getElementById("toggleSignupPass").addEventListener("click", function() {
+    const input = document.getElementById("signupPassword");
+    input.type = input.type === "password" ? "text" : "password";
+    this.innerText = input.type === "password" ? "👁️" : "🙈";
+  });
 
   // ========== LOAD CLASSES ==========
   async function loadClasses() {
@@ -38,38 +55,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       const classes = await res.json();
       const select = document.getElementById("signupClass");
       select.innerHTML = `<option value="">Select Class</option>`;
-      classes.forEach(c => {
-        select.innerHTML += `<option value="${c.className}">${c.className}</option>`;
-      });
+      if (Array.isArray(classes)) {
+        classes.forEach(c => {
+          select.innerHTML += `<option value="${c.className}">${c.className}</option>`;
+        });
+      }
     } catch (err) {
       console.error("Classes load error:", err);
     }
   }
-
-  // ========== SHOW/HIDE PASSWORD ==========
-  window.toggleLoginPassword = function() {
-    const input = document.getElementById("password");
-    const icon = document.querySelector("#loginSection .show-pass");
-    if (input.type === "password") {
-      input.type = "text";
-      icon.innerText = "🙈";
-    } else {
-      input.type = "password";
-      icon.innerText = "👁️";
-    }
-  };
-
-  window.toggleSignupPassword = function() {
-    const input = document.getElementById("signupPassword");
-    const icon = document.querySelector("#signupSection .show-pass");
-    if (input.type === "password") {
-      input.type = "text";
-      icon.innerText = "🙈";
-    } else {
-      input.type = "password";
-      icon.innerText = "👁️";
-    }
-  };
 
   // ========== LOGIN ==========
   document.getElementById("studentLoginForm").addEventListener("submit", async function(e) {
@@ -85,7 +79,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     btn.disabled = true;
     btn.innerText = "Logging in...";
 
-    // Remember me
     if (rememberMe) {
       localStorage.setItem("rememberedStudentEmail", email);
     } else {
